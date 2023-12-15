@@ -7,6 +7,8 @@ import bodyParser from "body-parser"
 import cors from "cors"
 import morgan from "morgan"
 import path from 'path'
+import {} from 'dotenv/config.js'
+
 
 const app = express();
 app.use(cors())
@@ -28,9 +30,7 @@ app.use("/", productRoute)
 app.use("/", orderRoute)
 
 mongoose
-  .connect(
-    "mongodb+srv://Jeff-Bezos:123jeff@cluster0.qwfgcrz.mongodb.net/?retryWrites=true&w=majority"
-  )
+  .connect(process.env.MONGO_URL)
   .then(() => console.log("connected to mongoDB"))
   .catch((error) => console.log(error));
 
