@@ -17,14 +17,6 @@ app.use(bodyParser.urlencoded({extended:false}))
 app.use("/uploads/images", express.static(path.join("uploads", "images")));
 app.use(morgan("dev"))
 
-// app.use(function (req, res, next) {
-//   res.setHeader('Access-Control-Allow-Origin', 'https://shop-node-6chj.onrender.com');
-//   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-//   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-//   res.setHeader('Access-Control-Allow-Credentials', true);
-//   next();
-// });
-
 app.use("/", userRoute)
 app.use("/", productRoute)
 app.use("/", orderRoute)
