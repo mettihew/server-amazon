@@ -7,8 +7,7 @@ import bodyParser from "body-parser"
 import cors from "cors"
 import morgan from "morgan"
 import path from 'path'
-import {} from 'dotenv/config.js'
-
+import {} from 'dotenv/config'
 
 const app = express();
 app.use(cors())
@@ -17,13 +16,13 @@ app.use(bodyParser.urlencoded({extended:false}))
 app.use("/uploads/images", express.static(path.join("uploads", "images")));
 app.use(morgan("dev"))
 
-app.use("/", userRoute)
-app.use("/", productRoute)
+app.use("/user", userRoute)
+app.use("/product", productRoute)
 app.use("/", orderRoute)
 
 mongoose
   .connect(process.env.MONGO_URL)
-  .then(() => console.log("connected to mongoDB"))
+  .then(() => console.log("----- connected to mongoDB"))
   .catch((error) => console.log(error));
 
-app.listen(4000, console.log("server started"));
+app.listen("4000", console.log("----- server started"));

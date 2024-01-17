@@ -1,12 +1,16 @@
-import express from "express"
+import express from 'express'
 const router = express.Router()
-import {deleteAccount, getUsers, login, createAccount, } from "../controllers/userCtrl.js"
-// import auth from "../middleware/auth.js"
-// import { updateProduct } from "../controllers/productCtrl.js"
+import { register, login, favorite, getUsers, addToUserCart } from '../controllers/userCtrl.js'
+import auth from '../middleware/auth.js'
 
-router.post("/user/create", createAccount)
-router.post("/user/login",  login)
-router.get("/user/get-all-users", getUsers)
-router.delete("/user/delete", deleteAccount)
+router.post('/register', register)
+router.post('/login', login)
+router.post('/favorite', auth, favorite)
+router.post('/add-to-cart', addToUserCart)
+// router.post('/add-to-cart', auth, addToUserCart)
+
+// delete later
+router.get('/get', getUsers)
+
 
 export default router

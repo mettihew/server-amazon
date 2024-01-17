@@ -10,6 +10,11 @@ export const cartSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Product",
   },
+  quality: {
+    type: Number,
+    default: 1,
+    required: true,
+},
   title: {
     type: String,
     required: true,

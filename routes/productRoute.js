@@ -1,15 +1,13 @@
-import express from "express"
+import express from 'express'
 const router = express.Router()
-import { addToCart, createProduct, getAproduct, getCart, getProducts, updateProduct, deleteFromCart } from "../controllers/productCtrl.js"
-import auth from "../middleware/auth.js"
-import {fileUpload} from "../middleware/addPhoto.js"
+import {  getProducts, getOneProduct,search , addProducts, getFavorites, getProductsCategory } from '../controllers/productCtrl.js'
 
-router.post("/product/create", fileUpload.single('image'), createProduct)
-router.get("/product/get-all", getProducts)
-router.post("/product/get-one", getAproduct)
-// router.put("/product/update", updateProduct)
-router.post("/product/add-to-cart", auth, addToCart)
-router.post("/product/get-cart", auth, getCart)
-router.post("/product/del", deleteFromCart)
+router.get('/get', getProducts)
+router.post('/get-cat', getProductsCategory)
+router.post('/search', search)
+router.post('/add', addProducts)
+router.post('/get-one/:id', getOneProduct)
+router.post('/get-favorites', getFavorites)
+
 
 export default router
