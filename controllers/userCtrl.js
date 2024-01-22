@@ -18,8 +18,10 @@ export const login = async (req, res) => {
    const { email, password } = req.body
    try {
       const user = await User.findOne({ email })
+      console.log(user);
       if (!user) return res.status(400).json({ msg: 'Username not exist' })
       const comparedPassword = await bcrypt.compare(password, user.password)
+      console.log(comparedPassword);
       if (!comparedPassword) return res.status(400).json({ msg: 'Invalid credentals' })
       const token = jwt.sign({ userId: user._id, email }, process.env.JWT_TOKEN, { expiresIn: "2m" })
       user.token = token
@@ -41,12 +43,22 @@ export const getUsers = async (req, res) => {
 }
 
 export const favorite = async (req, res) => {
+   console.log('you touched it');
    try {
-      const { pId, uId } = req.body
-      const list = await User.findById(uId, { $push: { list: pId } }, { new: true })
-      console.log(find);
-      // const list = await User.findByIdAndUpdate(uId, { $push: {list: pId} }, {new: true})
-      // res.json(list)
+      const { userId, productId } = req.body
+      const foundUser = await User.findOne({ _id: userId })
+      let alreadyExist = foundUser.list.find(ev => {
+         return ev === productId
+      })
+      if (alreadyExist) {
+         console.log('exist');
+         const del = await User.findByIdAndUpdate(userId, { $pull: { list: productId  } }, { new: true })
+         res.json(del)
+      } else {
+         console.log('exist not');
+         const add = await User.findByIdAndUpdate(userId, { $push: { list: productId} }, { new: true })
+         res.json(add)
+      }
    } catch (error) {
       throw new Error(error)
    }
@@ -56,18 +68,14 @@ export const addToUserCart = async (req, res) => {
    try {
       const { userId, productId } = req.body
       const foundUser = await User.findOne({ _id: userId })
-      console.log(foundUser);
       let alreadyExist = foundUser.cart.find(ev => {
          return ev.pId === productId
       })
-      console.log(alreadyExist);
       if (alreadyExist) {
-         const update = await User.findByIdAndUpdate(userId, { cart: { pId: productId, quantity: alreadyExist.quantity += 1 } }, { new: true })
-         console.log('update toched', update);
+         const update = await User.findByIdAndUpdate(userId, { cart: { productId, quantity: alreadyExist.quantity += 1 } }, { new: true })
          res.json(update)
       } else {
-         const add = await User.findByIdAndUpdate(userId, { $push: { cart: { pId: productId, quantity: 1 } } }, { new: true })
-         console.log('add toched', add);
+         const add = await User.findByIdAndUpdate(userId, { $push: { cart: { productId, quantity: 1 } } }, { new: true })
          res.json(add)
       }
    } catch (error) {

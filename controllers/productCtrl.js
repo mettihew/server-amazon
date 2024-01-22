@@ -108,7 +108,7 @@ export const getFavorites = async (req, res) => {
 }
 
 export const search = async (req, res) => {
-   const {text} = req.body
+   const { text } = req.body
    const find = await Product.find().or([
       { name: { $regex: text, $options: 'i' } },
       { category: { $regex: text, $options: 'i' } }
@@ -116,4 +116,24 @@ export const search = async (req, res) => {
    res.json(find)
 }
 
-export default { getProducts, addProducts, getOneProduct, getFavorites, getProductsCategory, search }
+export const reviewRating = async (req, res) => {
+   try {
+      const { review, rating, productId, userId, userName } = req.body
+      console.log(userName, '-------------------------------');
+      // const foundProduct = await Product.findOne({ _id: productId })
+      // let userAlreadyRated = foundProduct.review.find(ev => {
+      //    return ev.userId === userId
+      // })
+      // if (userAlreadyRated) {
+      //    return res.status(409).send('You have already reviewed this item!')
+      // } else {
+         const reviewSubmit = await Product.findByIdAndUpdate(productId, { $push: {review : {userId, review, userName, rating} } }, { new: true })
+         const ratingSubmit = await Product.findByIdAndUpdate(productId, { $push: {rating : {userId, rating}  } }, { new: true })
+         res.json({reviewSubmit, ratingSubmit} )
+      // }
+   } catch (error) {
+      throw new Error(error)
+   }
+}
+
+export default { getProducts, addProducts, getOneProduct, getFavorites, getProductsCategory, search, reviewRating }
