@@ -85,12 +85,13 @@ export const getProducts = async (req, res) => {
 }
 
 export const getProductsCategory = async (req, res) => {
-   const { category } = req.body
-   const { page } = req.query
+   let { cat } = req.query
+   const page = 1
    const limit = 5
-   const count = await Product.find({ category }).countDocuments()
+   const count = await Product.find({ category: cat }).countDocuments()
    const countDocuments = (count / limit)
-   const get = await Product.find({ category }).limit(limit).skip((page - 1) * limit)
+   const get = await Product.find({ category: cat }).limit(limit).skip((page - 1) * limit)
+   console.log(get);
    res.json({ get, countDocuments: Math.ceil(countDocuments) })
 }
 
