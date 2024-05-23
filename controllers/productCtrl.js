@@ -1,4 +1,4 @@
-import Product from '../models/productModel.js'
+import Product, { productSchema } from '../models/productModel.js'
 
 export const addProducts = async (req, res) => {
 
@@ -91,7 +91,6 @@ export const getProductsCategory = async (req, res) => {
    const count = await Product.find({ category: cat }).countDocuments()
    const countDocuments = (count / limit)
    const get = await Product.find({ category: cat }).limit(limit).skip((page - 1) * limit)
-   console.log(get);
    res.json({ get, countDocuments: Math.ceil(countDocuments) })
 }
 
@@ -104,7 +103,6 @@ export const getOneProduct = async (req, res) => {
 export const getFavorites = async (req, res) => {
    const arr = req.body
    const find = await Product.find({ _id: arr })
-   console.log(find);
    res.json(find)
 }
 
@@ -117,10 +115,16 @@ export const search = async (req, res) => {
    res.json(find)
 }
 
+export const getUserCartProducts = async (req, res) => {
+   const arr = req.body
+   console.log(arr);
+   const find = await Product.find({ _id: arr })
+   res.json(find)
+}
+
 export const reviewRating = async (req, res) => {
    try {
       const { review, rating, productId, userId, userName } = req.body
-      console.log(userName, '-------------------------------');
       // const foundProduct = await Product.findOne({ _id: productId })
       // let userAlreadyRated = foundProduct.review.find(ev => {
       //    return ev.userId === userId
@@ -137,4 +141,4 @@ export const reviewRating = async (req, res) => {
    }
 }
 
-export default { getProducts, addProducts, getOneProduct, getFavorites, getProductsCategory, search, reviewRating }
+export default { getProducts, addProducts, getOneProduct, getFavorites, getProductsCategory, search, reviewRating, getUserCartProducts }
